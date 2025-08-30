@@ -3,7 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
-import postRoutes  from "./routes/postRoutes.js";
+import {postRoutes, getRoute }from "./routes/postRoutes.js";
+
+
 
 const app = express();
 
@@ -16,6 +18,7 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api/post/:id', getRoute);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("API is running...");

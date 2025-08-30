@@ -5,8 +5,27 @@ import Post from "../models/Post.js";
 
 const router = Router();
 
+// Get post by ID
+export const getRoute =router.get("/:id", authMiddleware, async (req: Request, res: Response) => {
+  try {
+    const postId = req.params.id;
+
+    const post = await Post.findById(postId)
+      .populate("user", "name email") // optional: include user details
+      .populate("comments.user", "name email"); // optional: include commenter details
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
 // Create post with file upload
-router.post("/", authMiddleware, upload.single("image"), async (req: Request & { file?: any }, res: Response) => {
+export const postRoutes = router.post("/", authMiddleware, upload.single("image"), async (req: Request & { file?: any }, res: Response) => {
   try {
     const { title, description } = req.body;
     const userId = (req as any).user.id;
@@ -27,5 +46,3 @@ router.post("/", authMiddleware, upload.single("image"), async (req: Request & {
     res.status(500).json({ message: "Server error", error: err });
   }
 });
-
-export default router;
