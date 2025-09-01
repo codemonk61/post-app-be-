@@ -4,7 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
-import {postRoutes, getRoute, getAllPosts, getUserPostsById }from "./routes/postRoutes.js";
+import {postRoutes, getUserPostsById }from "./routes/postRoutes.js";
 import { fileURLToPath } from "url";
 
 
@@ -36,8 +36,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use('/api/post', postRoutes);
-app.use('/api/post', getUserPostsById);
-app.use('/api/post', getAllPosts);
+app.use('/api/post/user', getUserPostsById);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send("API is running...");
